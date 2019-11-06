@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Badge, Image, Flex, Link, Text, Spinner } from '@chakra-ui/core';
 
-import  Layout  from '../components/Layout';
+import Layout from '../components/Layout';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
