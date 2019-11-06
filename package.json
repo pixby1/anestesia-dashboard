@@ -1,0 +1,35 @@
+{
+  "name": "anestesia-dashboard",
+  "version": "1.0.0",
+  "description": "prueba conceptual",
+  "main": "index.js",
+  "author": "Makor Peña",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@chakra-ui/core": "^0.4.1",
+    "@emotion/core": "^10.0.22",
+    "@emotion/styled": "^10.0.23",
+    "emotion-theming": "^10.0.19",
+    "next": "^9.1.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.2.0",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "now-dev": "now dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}
