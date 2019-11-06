@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 
 const Approved = () => {
   return (
-    <Layout>
+    <Layout tabIndex={1}>
       <h1>usuarios aprovados</h1>
     </Layout>
   );
