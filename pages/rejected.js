@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 
 const Rejected = () => {
   return (
-    <Layout>
+    <Layout tabIndex={2}>
       <h1>usuarios rechazados</h1>
     </Layout>
   );

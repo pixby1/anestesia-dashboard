@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   ThemeProvider,
@@ -11,24 +11,12 @@ import {
 
 import { useRouter } from 'next/router';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, tabIndex }) => {
   const router = useRouter();
-  const [tabIndex, setTabIndex] = useState(0);
-  const handleTab = () => {
-    if (tabIndex === '/') {
-      setTabIndex(tabIndex);
-    }
-    if (router.pathname === '/approved') {
-      setTabIndex(tabIndex);
-    }
-    if (router.pathname === '/rejected') {
-      setTabIndex(tabIndex);
-    }
-  };
   return (
     <ThemeProvider theme={theme}>
       <CSSReset />
-      <Tabs index={tabIndex} onChange={handleTab} isFitted>
+      <Tabs index={tabIndex} isFitted>
         <TabList color="#666">
           <Tab onClick={() => router.push('/')}>usuarios pendientes</Tab>
           <Tab onClick={() => router.push('/approved')}>usuarios aprovados</Tab>
@@ -42,8 +30,13 @@ const Layout = ({ children }) => {
   );
 };
 
+Layout.defaultProps = {
+  tabIndex: 0
+};
+
 Layout.propTypes = {
-  children: PropTypes.object.isRequired
+  children: PropTypes.object.isRequired,
+  tabIndex: PropTypes.number.isRequired
 };
 
 export default Layout;
