@@ -19,7 +19,7 @@ const Layout = ({ children, tabIndex }) => {
       <Tabs index={tabIndex} isFitted>
         <TabList color="#666">
           <Tab onClick={() => router.push('/')}>usuarios pendientes</Tab>
-          <Tab onClick={() => router.push('/approved')}>usuarios aprovados</Tab>
+          <Tab onClick={() => router.push('/approved')}>usuarios aprobados</Tab>
           <Tab onClick={() => router.push('/rejected')}>
             usuarios rechazados
           </Tab>
@@ -39,4 +39,4 @@ Layout.propTypes = {
   tabIndex: PropTypes.number.isRequired
 };
 
-export default Layout;
+export { Layout };
