@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/core';
 
 // Components
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/Dashboard/Layout';
 import { SpinnerLoad } from '../components/Spinner';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
