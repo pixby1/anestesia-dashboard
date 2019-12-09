@@ -9,9 +9,6 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { MessageInfo } from '../components/MessageInfo';
 
-// Utils
-import { removeUser } from '../lib/utils/removeUser';
-
 const Rejected = () => {
   const [users, setUser] = useState([]);
   const [isLoading, setLoading] = useState(null);
@@ -24,8 +21,7 @@ const Rejected = () => {
     };
     fetchData();
   }, []);
-  const handleClick = (index, item) => {
-    removeUser('https://anestesia.now.sh/api/rejected', item._id);
+  const handleClick = index => {
     const removeItem = [...users];
     removeItem.splice(index, 1);
     setUser(removeItem);
