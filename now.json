@@ -1,3 +1,5 @@
 {
-    "public": true
+    "env": {
+        "MONGODB_URI": "@anestesia-mongodb-uri"
+    }
 }

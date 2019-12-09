@@ -8,7 +8,6 @@ import {
   TabList,
   Tab
 } from '@chakra-ui/core';
-
 import { useRouter } from 'next/router';
 
 const Layout = ({ children, tabIndex }) => {
@@ -18,7 +17,9 @@ const Layout = ({ children, tabIndex }) => {
       <CSSReset />
       <Tabs index={tabIndex} isFitted>
         <TabList color="#666">
-          <Tab onClick={() => router.push('/')}>usuarios pendientes</Tab>
+          <Tab onClick={() => router.push('/dashboard')}>
+            usuarios pendientes
+          </Tab>
           <Tab onClick={() => router.push('/approved')}>usuarios aprobados</Tab>
           <Tab onClick={() => router.push('/rejected')}>
             usuarios rechazados
