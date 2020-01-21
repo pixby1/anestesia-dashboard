@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectToDB(process.env.MONGODB_URI);
   if(req.method === 'POST') {
     const { society } = req.body;
-    const users = await User.find({ society, verified: true, role: 'ADMIN_ROLE' })
+    const users = await User.find({ society, role: 'ADMIN_ROLE' })
     return res.status(200).json(users);
   }
   return res.status(404).json({
