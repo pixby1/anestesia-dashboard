@@ -5,6 +5,11 @@ const validRoles = {
   message: "{VALUE} not a valid role"
 };
 
+const validState = {
+  values: ["PENDING", "APPROVED", "REJECTED"],
+  message: "{VALUE} not a valid role"
+}
+
 const userSchema = new Schema({
   name: {
     type: String,
@@ -40,13 +45,15 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'the date is mandatory']
   },
-  state: {
-    type: Boolean,
-    default: true
-  },
-  verified: {
+  // datos que usare en el backend (no seran visible para el usuario)
+  userRemove: {
     type: Boolean,
     default: false
+  },
+  state: {
+    type: String,
+    enum: validState,
+    default: "PENDING"
   },
   role: {
     type: String,
