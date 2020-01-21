@@ -32,7 +32,7 @@ const Card = ({ user, index, children }) => {
       boxShadow="md"
     >
       <Image
-        src="https://2.bp.blogspot.com/_M4wqSdE62l8/TD-V3gVqBSI/AAAAAAAABPY/SU2yHl3fhLY/s1600/ModoSennin.jpg"
+        src="https://guiauniversitaria.mx/wp-content/uploads/2019/10/16-de-octubre-di%CC%81a-mundial-del-anestesio%CC%81logo-1068x623.jpg"
         alt="imagen de naruto"
       />
       <Box p="6">
@@ -47,16 +47,24 @@ const Card = ({ user, index, children }) => {
             <Collapse isOpen={isCollapse}>
               <Box d="inline" lignItems="baseline">
                 <Stack spacing={1} mt={3}>
-                  <Text>edad: {user.age} años</Text>
-                  <Text>telefono: {user.phone}</Text>
-                  <Text>fecha de nacimiento: {user.birthday}</Text>
-                  <Text>genero: {user.gender}</Text>
-                  <Text>nacionalidad: {user.nationality}</Text>
-                  <Text>direccion: {user.address}</Text>
-                  <Text>especialidad: {user.specialty}</Text>
-                  <Text>sub-espacialidad: {user.subSpecialty}</Text>
-                  <Text>residente: {user.resident}</Text>
-                  <Text>sociedad: {user.society}</Text>
+                  <Text>
+                    <b>email:</b> {user.email}
+                  </Text>
+                  <Text>
+                    <b>rol del trabajo:</b> {user.jobRole}
+                  </Text>
+                  <Text>
+                    <b>dni:</b> {user.dni}
+                  </Text>
+                  <Text>
+                    <b>país:</b> {user.country}
+                  </Text>
+                  <Text>
+                    <b>sociedad:</b> {user.society}
+                  </Text>
+                  <Text>
+                    <b>fecha de creación:</b> {user.date}
+                  </Text>
                 </Stack>
               </Box>
               <Flex align="center" justify="center" mt={2}>

@@ -16,20 +16,42 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const res = await fetch('https://anestesia.now.sh/api/user');
+      const res = await fetch('/api/pending');
       res.json().then(res => setUser(res));
       setLoading(false);
     };
     fetchData();
   }, []);
+  const approvedUser = (index, item) => {
+    fetch('/api/approved', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, state: 'APPROVED' })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+    });
+  };
+  const rejectedUser = (index, item) => {
+    fetch('/api/rejected', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, state: 'REJECTED' })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+    });
+  };
   const checkUsers = () => {
     if (users.length) {
       return users.map((item, index) => (
         <Card key={item._id} index={index} user={item}>
-          <Button action={() => {}} type="succes">
+          <Button action={() => approvedUser(index, item)} type="succes">
             Aprobar
           </Button>
-          <Button action={() => {}} type="error">
+          <Button action={() => rejectedUser(index, item)} type="error">
             Rechazar
           </Button>
         </Card>
@@ -44,33 +66,6 @@ const Dashboard = () => {
       </Flex>
     </Layout>
   );
-};
-
-Dashboard.getInitialProps = ({ req, res }) => {
-  if (typeof window === 'undefined') {
-    // Packages
-    const Cookies = require('cookies');
-    const jwt = require('jsonwebtoken');
-
-    const cookie = new Cookies(req, res);
-    const token = cookie.get('token');
-    const dataDecoded = jwt.verify(
-      token,
-      '2BD41682-8DA5-438B-808A-05C4E12EC919'
-    );
-    const { verify } = dataDecoded;
-    if (!token) {
-      res.writeHead(301, { Location: '/login' });
-      res.end();
-      return {};
-    }
-    if (!verify) {
-      res.writeHead(301, { Location: '/login' });
-      res.end();
-      return {};
-    }
-    return { dataDecoded };
-  }
 };
 
 export default Dashboard;

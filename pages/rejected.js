@@ -15,16 +15,22 @@ const Rejected = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const res = await fetch('https://anestesia.now.sh/api/rejected');
+      const res = await fetch('/api/rejected');
       res.json().then(res => setUser(res));
       setLoading(false);
     };
     fetchData();
   }, []);
-  const handleClick = index => {
-    const removeItem = [...users];
-    removeItem.splice(index, 1);
-    setUser(removeItem);
+  const handleClick = (index, item) => {
+    fetch('/api/removeUser', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: item.id, userRemove: true })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+    });
   };
   const checkUsers = () => {
     if (users.length) {

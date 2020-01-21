@@ -50,7 +50,7 @@
     ]
   },
   "scripts": {
-    "dev": "next dev -p 5000",
+    "dev": "next dev",
     "now-dev": "now dev",
     "build": "next build",
     "start": "next start"
