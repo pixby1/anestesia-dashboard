@@ -13,7 +13,7 @@
     "cookies": "^0.8.0",
     "emotion-theming": "^10.0.19",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.8.1",
+    "mongoose": "^5.8.9",
     "next": "^9.1.6",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
