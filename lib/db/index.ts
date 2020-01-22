@@ -10,6 +10,7 @@ async function connectToDB(uri: string) {
   }
   console.log('> DB is connected');
   const db = await connect(uri, {
+    useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
