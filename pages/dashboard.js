@@ -26,7 +26,7 @@ const Dashboard = () => {
     fetch('/api/approved', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: item.id, state: 'APPROVED' })
+      body: JSON.stringify({ id: item._id, state: 'APPROVED' })
     }).then(() => {
       const removeItem = [...users];
       removeItem.splice(index, 1);
@@ -37,7 +37,7 @@ const Dashboard = () => {
     fetch('/api/rejected', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: item.id, state: 'REJECTED' })
+      body: JSON.stringify({ id: item._id, state: 'REJECTED' })
     }).then(() => {
       const removeItem = [...users];
       removeItem.splice(index, 1);
