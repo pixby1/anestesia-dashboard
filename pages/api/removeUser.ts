@@ -18,7 +18,7 @@ async function hanlder (req: NextApiRequest, res: NextApiResponse) {
     }
     if(req.method === 'PUT') {
         const { id, userRemove } = req.body;
-        await User.findOneAndUpdate(id, { userRemove });
+        await User.findByIdAndUpdate(id, { userRemove });
         return res.status(200).end();
     }
 }
