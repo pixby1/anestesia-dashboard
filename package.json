@@ -7,47 +7,44 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@chakra-ui/core": "^0.5.1",
-    "@emotion/core": "^10.0.22",
-    "@emotion/styled": "^10.0.23",
+    "@chakra-ui/core": "^0.5.2",
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
     "cookies": "^0.8.0",
-    "emotion-theming": "^10.0.19",
+    "emotion-theming": "^10.0.27",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.9",
-    "next": "^9.1.6",
+    "next": "^9.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
     "@types/cookies": "^0.7.4",
-    "@types/jsonwebtoken": "^8.3.5",
-    "@types/mongoose": "^5.5.34",
+    "@types/jsonwebtoken": "^8.3.7",
+    "@types/mongoose": "^5.5.42",
     "@types/ms": "^0.7.31",
-    "@types/node": "^12.12.21",
-    "@types/react": "^16.9.13",
+    "@types/node": "^13.1.8",
+    "@types/react": "^16.9.19",
     "bluebird": "^3.7.1",
-    "eslint": "^6.7.0",
-    "eslint-config-prettier": "^6.7.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.4.3",
+    "husky": "^4.2.0",
+    "lint-staged": "^10.0.2",
     "ms": "^2.1.2",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.5"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged --allow-empty"
     }
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.js": ["eslint --fix"]
   },
   "scripts": {
     "dev": "next dev",
