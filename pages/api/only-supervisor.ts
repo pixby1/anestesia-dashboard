@@ -12,6 +12,9 @@ import { connectToDB } from '../../lib/db';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectToDB(process.env.MONGODB_URI);
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   if(req.method === 'POST') {
     const { society } = req.body;
     const users = await User.find({ society, role: 'ADMIN_ROLE' })
