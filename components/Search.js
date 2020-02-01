@@ -43,7 +43,7 @@ const Search = ({ value, onChange, onClick }) => {
       <input
         value={value}
         className="search_input"
-        placeholder="Search your name..."
+        placeholder="Search your name...."
         onChange={onChange}
       />
       <div className="bt_search" onClick={onClick}>
