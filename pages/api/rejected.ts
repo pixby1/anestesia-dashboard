@@ -12,6 +12,11 @@ import { connectToDB } from '../../lib/db';
 
 async function hanlder(req: NextApiRequest, res: NextApiResponse) {
     await connectToDB(process.env.MONGODB_URI)
+    const { search } = req.query;
+    if(req.method === 'GET' && search) {
+        const user = await User.find({ name: search, state: 'REJECTED' });
+        return res.status(200).json(user);
+    }
     if (req.method === 'GET') {
         const users = await User.find({ state: 'REJECTED', userRemove: false });
        return res.status(200).json(users);

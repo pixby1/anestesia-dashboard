@@ -1,6 +1,9 @@
 # dependencies
 node_modules
 
+# folder of the binary (yarn v1)
+.yarn
+
 # build output
 .next
 
