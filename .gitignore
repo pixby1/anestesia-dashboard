@@ -1,7 +1,7 @@
 # dependencies
 node_modules
 
-# yarn
+# folder of the binary (yarn v1)
 .yarn
 
 # build output
