@@ -18,16 +18,16 @@ const columns = [
     dataIndex: 'society'
   },
   {
-    title: 'Total',
-    dataIndex: 'total'
+    title: 'Anestesiologo',
+    dataIndex: 'anesthesiologist'
   },
   {
     title: 'Residente',
     dataIndex: 'resident'
   },
   {
-    title: 'Anestesiologo',
-    dataIndex: 'anesthesiologist'
+    title: 'Total',
+    dataIndex: 'total'
   }
 ];
 
