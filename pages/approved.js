@@ -1,6 +1,6 @@
 // Packages
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Select, Button, Row } from 'antd';
+import { Table, Input, Select, Button, Row, Popconfirm } from 'antd';
 
 const { Option } = Select;
 
@@ -71,8 +71,15 @@ const Approved = () => {
     return setUser(data);
   };
   const handleDelete = (index, record) => {
-    console.log(index);
-    console.log(record);
+    fetch('/api/removeUser', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: record._id, userRemove: true })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+    });
   };
   const columnsUser = [
     {
@@ -101,9 +108,12 @@ const Approved = () => {
       dataIndex: 'action',
       // eslint-disable-next-line react/display-name
       render: (text, record, index) => (
-        <Button type="danger" onClick={() => handleDelete(index, record)}>
-          Delete
-        </Button>
+        <Popconfirm
+          title="¿Estás seguro que desea eliminarlo😧?"
+          onConfirm={() => handleDelete(index, record)}
+        >
+          <Button type="danger">Delete</Button>
+        </Popconfirm>
       )
     }
   ];
