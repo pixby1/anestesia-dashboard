@@ -14,7 +14,7 @@ async function hanlder(req: NextApiRequest, res: NextApiResponse) {
     await connectToDB(process.env.MONGODB_URI)
     const { query } = req;
     if (req.method === 'GET' && Object.keys(query).length) {
-        const user = await User.find({ $and: [ { $or: [req.query] },  { state: 'APPROVED' } ] });
+        const user = await User.find({ $and: [ { $or: [req.query] },  { state: 'APPROVED', userRemove: false } ] });
         return res.status(200).json(user);
     }
     if (req.method === 'GET') {
