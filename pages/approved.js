@@ -84,8 +84,7 @@ const Approved = () => {
   const columnsUser = [
     {
       title: 'País',
-      dataIndex: 'society',
-      key: 'society'
+      dataIndex: 'society'
     },
     {
       title: 'Apellido',
@@ -134,7 +133,13 @@ const Approved = () => {
     if (users.length === 0) {
       return <Table columns={columns} dataSource={finallyData} />;
     }
-    return <Table columns={columnsUser} dataSource={users} />;
+    return (
+      <Table
+        style={{ overflow: 'auto' }}
+        columns={columnsUser}
+        dataSource={users}
+      />
+    );
   };
   console.log(users);
   return (
