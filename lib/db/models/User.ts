@@ -28,10 +28,6 @@ const userSchema = new Schema({
     type: String,
     required: [true, "the jobRole is mandatory"]
   },
-  dni: {
-    type: String,
-    required: [true, "the dni is mandatory"]
-  },
   country: {
     type: String,
     required: [true, "the country is mandatory"]
@@ -39,7 +35,6 @@ const userSchema = new Schema({
   society: {
     type: String,
     required: [true, "the society is mandatory"]
-
   },
   date: {
     type: String,
