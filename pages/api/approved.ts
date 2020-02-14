@@ -21,11 +21,6 @@ async function hanlder(req: NextApiRequest, res: NextApiResponse) {
         const users = await User.find({ state: 'APPROVED', userRemove: false });
        return res.status(200).json(users);
     }
-    if (req.method === 'PUT') {
-        const { id, state } = req.body;
-        await User.findByIdAndUpdate(id, { state })
-        return res.status(200).end();
-    }
     return res.status(404).json({
         error: {
             code: 'not_found',
