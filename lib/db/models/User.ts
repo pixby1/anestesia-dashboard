@@ -6,7 +6,7 @@ const validRoles = {
 };
 
 const validState = {
-  values: ["PENDING", "APPROVED", "REJECTED"],
+  values: ["PENDING", "APPROVED"],
   message: "{VALUE} not a valid role"
 }
 
