@@ -116,32 +116,31 @@ const Approved = () => {
       )
     }
   ];
-  const result = count(userTotal);
-  const resultArray = [...result];
-  const dummy = resultArray.map((item, index) => {
-    const fake = {
+  const countResult = count(userTotal);
+  const countArr = [...countResult];
+  const dataParser = countArr.map((item, index) => {
+    return {
       id: index,
       society: item[0],
       total: item[1].total,
       resident: item[1].residente || 0,
       anesthesiologist: item[1].anestesiólogo || 0
     };
-    return fake;
   });
-  const finallyData = [...dummy];
+  const userMetrics = [...dataParser];
   const firstContent = () => {
     if (users.length === 0) {
-      return <Table columns={columns} dataSource={finallyData} />;
+      return <Table bordered columns={columns} dataSource={userMetrics} />;
     }
     return (
       <Table
+        bordered
         style={{ overflow: 'auto' }}
         columns={columnsUser}
         dataSource={users}
       />
     );
   };
-  console.log(users);
   return (
     <Layout tabIndex={1}>
       <Row type="flex" justify="center" style={{ margin: '3em' }}>
