@@ -10,10 +10,20 @@ import User from '../../lib/db/models/User';
 // DB
 import { connectToDB } from '../../lib/db';
 
-async function hanlder(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDB(process.env.MONGODB_URI)
     const { query } = req;
     if (req.method === 'GET' && Object.keys(query).length) {
+        if(query.name) {
+            // @ts-ignore
+            const regex = new RegExp(query.name, 'i');
+            query.name = regex;
+        }
+        if(query.lastName) {
+            // @ts-ignore
+            const regex = new RegExp(query.lastName, 'i');
+            query.lastName = regex;
+        }
         const user = await User.find({ $and: [ { $or: [query] },  { state: 'APPROVED', userRemove: false } ] });
         return res.status(200).json(user);
     }
@@ -29,4 +39,4 @@ async function hanlder(req: NextApiRequest, res: NextApiResponse) {
     });
 }
 
-export default errorWrapper(hanlder);
+export default errorWrapper(handler);
