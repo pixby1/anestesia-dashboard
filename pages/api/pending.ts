@@ -14,6 +14,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectToDB(process.env.MONGODB_URI)
     const { query } = req
     if (req.method === 'GET' && Object.entries(query).length) {
+        if(query.name) {
+            // @ts-ignore
+            const regex = new RegExp(query.name, 'i');
+            query.name = regex;
+        }
+        if(query.lastName) {
+            // @ts-ignore
+            const regex = new RegExp(query.lastName, 'i');
+            query.lastName = regex;
+        }
         const user = await User.find({ $and: [ { $or: [query] },  { state: 'PENDING', userRemove: false } ] });
         return res.status(200).json(user);
     }
