@@ -7,7 +7,11 @@ import {
   Tabs,
   TabList,
   Tab,
-  Flex
+  Flex,
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem
 } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
@@ -21,12 +25,19 @@ const Layout = ({ children, tabIndex }) => {
       <CSSReset />
       <Flex justify="space-between">
         <Badge>Admin</Badge>
+        <Menu>
+          <MenuButton mr="1em">Home</MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => router.push('/deletedUsers')}>
+              Usuarios borrados
+            </MenuItem>
+            <MenuItem onClick={() => {}}>Sistema de alertas</MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
       <Tabs index={tabIndex} isFitted>
-        <TabList color="#666">
-          <Tab onClick={() => router.push('/dashboard')}>
-            usuarios pendientes
-          </Tab>
+        <TabList>
+          <Tab onClick={() => router.push('/')}>usuarios pendientes</Tab>
           <Tab onClick={() => router.push('/approved')}>usuarios aprobados</Tab>
         </TabList>
       </Tabs>

@@ -1,8 +1,8 @@
 // Packages
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Select, Button, Row, Popconfirm } from 'antd';
+import { Table, Input, Select, Button, Row, Popconfirm, message } from 'antd';
 
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 
 // Components
 import { Layout } from '../components/Dashboard/Layout';
@@ -15,7 +15,7 @@ import { rolJobs } from '../lib/helper/rolOption';
 const columns = [
   {
     title: 'País',
-    dataIndex: 'society'
+    dataIndex: 'country'
   },
   {
     title: 'Anestesiologo',
@@ -37,6 +37,7 @@ const Approved = () => {
   const [state, setState] = useState({ lastName: '', name: '' });
   const [countrySelect, setCountry] = useState('');
   const [rolSelect, setRol] = useState('');
+  const [isError, setErrorSearch] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch('/api/approved');
@@ -60,15 +61,26 @@ const Approved = () => {
     if (state.lastName) {
       query.set('lastName', state.lastName);
     }
-    if (rolSelect !== '') {
+    if (rolSelect === 'todos') {
+      const res = await fetch('/api/approved');
+      const data = await res.json();
+      setUser(data);
+    }
+    if (rolSelect !== '' && rolSelect !== 'todos') {
       query.set('jobRole', rolSelect);
     }
-    if (countrySelect !== '') {
-      query.set('society', countrySelect);
+    if (countrySelect === 'todos') {
+      const res = await fetch('/api/approved');
+      const data = await res.json();
+      setUser(data);
+    }
+    if (countrySelect !== '' && countrySelect !== 'todos') {
+      query.set('country', countrySelect);
     }
     const res = await fetch(`/api/approved?${query}`);
     const data = await res.json();
-    return setUser(data);
+    setUser(data);
+    return setErrorSearch(!data.length);
   };
   const handleDelete = (index, record) => {
     fetch('/api/removeUser', {
@@ -79,13 +91,10 @@ const Approved = () => {
       const removeItem = [...users];
       removeItem.splice(index, 1);
       setUser(removeItem);
+      message.success('Usuario eliminado');
     });
   };
   const columnsUser = [
-    {
-      title: 'País',
-      dataIndex: 'society'
-    },
     {
       title: 'Apellido',
       dataIndex: 'lastName'
@@ -99,7 +108,7 @@ const Approved = () => {
       dataIndex: 'email'
     },
     {
-      title: 'Rol',
+      title: 'Categoría',
       dataIndex: 'jobRole'
     },
     {
@@ -116,32 +125,51 @@ const Approved = () => {
       )
     }
   ];
-  const result = count(userTotal);
-  const resultArray = [...result];
-  const dummy = resultArray.map((item, index) => {
-    const fake = {
+  const countResult = count(userTotal);
+  console.log('usuarios result');
+  console.log(countResult);
+  const countArr = [...countResult];
+  console.log('usuarios Arr');
+  console.log(countArr);
+  const dataParser = countArr.map((item, index) => {
+    return {
       id: index,
-      society: item[0],
+      country: item[0],
       total: item[1].total,
       resident: item[1].residente || 0,
       anesthesiologist: item[1].anestesiólogo || 0
     };
-    return fake;
   });
-  const finallyData = [...dummy];
+  console.log('dato parseados');
+  console.log(dataParser);
+  const userMetrics = [...dataParser];
+  console.log('datos de la metrica');
+  console.log(userMetrics);
   const firstContent = () => {
     if (users.length === 0) {
-      return <Table columns={columns} dataSource={finallyData} />;
+      return <Table bordered columns={columns} dataSource={userMetrics} />;
     }
     return (
       <Table
+        bordered
         style={{ overflow: 'auto' }}
         columns={columnsUser}
         dataSource={users}
       />
     );
   };
-  console.log(users);
+  const notCountries = countries.filter(item => {
+    return item.label === 'Todos';
+  });
+  const countrieList = countries.filter(item => {
+    return item.label !== 'Todos';
+  });
+  const rolAll = rolJobs.filter(item => {
+    return item.label === 'Todos';
+  });
+  const rolCategory = rolJobs.filter(item => {
+    return item.label !== 'Todos';
+  });
   return (
     <Layout tabIndex={1}>
       <Row type="flex" justify="center" style={{ margin: '3em' }}>
@@ -150,11 +178,18 @@ const Approved = () => {
           style={{ marginRight: 8, width: 120, maxWidth: '60vw' }}
           onChange={selectValue => setCountry(selectValue)}
         >
-          {countries.map((item, index) => (
-            <Option value={item.value} key={index}>
+          {notCountries.map((item, index) => (
+            <Option key={index} value={item.value}>
               {item.label}
             </Option>
           ))}
+          <OptGroup label="Países">
+            {countrieList.map((item, index) => (
+              <Option key={index} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </OptGroup>
         </Select>
         <Input
           name="lastName"
@@ -173,11 +208,18 @@ const Approved = () => {
           style={{ width: 120, maxWidth: '60vw' }}
           onChange={value => setRol(value)}
         >
-          {rolJobs.map((item, index) => (
-            <Option value={item.value} key={index}>
+          {rolAll.map((item, index) => (
+            <Option key={index} value={item.value}>
               {item.label}
             </Option>
           ))}
+          <OptGroup label="Categorías">
+            {rolCategory.map((item, index) => (
+              <Option key={index} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </OptGroup>
         </Select>
         <Button
           style={{ marginLeft: 8 }}
@@ -187,6 +229,11 @@ const Approved = () => {
           icon="search"
         />
       </Row>
+      {isError && (
+        <Row type="flex" justify="center" style={{ margin: '3em' }}>
+          <h1>No se encontraron datos en la busqueda 😑</h1>
+        </Row>
+      )}
       {firstContent()}
     </Layout>
   );

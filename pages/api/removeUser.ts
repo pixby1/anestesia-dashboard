@@ -10,7 +10,7 @@ import { connectToDB } from '../../lib/db';
 // Utils
 import { errorWrapper } from '../../lib/utils/error-wrapper';
 
-async function hanlder (req: NextApiRequest, res: NextApiResponse) {
+async function handler (req: NextApiRequest, res: NextApiResponse) {
     await connectToDB(process.env.MONGODB_URI)
     if(req.method === 'GET') {
         const users = await User.find({ userRemove: true });
@@ -23,4 +23,4 @@ async function hanlder (req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-export default errorWrapper(hanlder);
+export default errorWrapper(handler);
