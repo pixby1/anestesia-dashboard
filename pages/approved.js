@@ -12,37 +12,20 @@ import { count } from '../lib/helper/count';
 import { countries } from '../lib/helper/countryOption';
 import { rolJobs } from '../lib/helper/rolOption';
 
-const columns = [
-  {
-    title: 'País',
-    dataIndex: 'country'
-  },
-  {
-    title: 'Anestesiologo',
-    dataIndex: 'anesthesiologist'
-  },
-  {
-    title: 'Residente',
-    dataIndex: 'resident'
-  },
-  {
-    title: 'Total',
-    dataIndex: 'total'
-  }
-];
-
 const Approved = () => {
-  const [userTotal, setUserTotal] = useState([]);
   const [users, setUser] = useState([]);
+  const [usesrSearch, setUsersSearch] = useState([]);
+  const [totalMetrics, setTotalMetrics] = useState([]);
   const [state, setState] = useState({ lastName: '', name: '' });
   const [countrySelect, setCountry] = useState('');
   const [rolSelect, setRol] = useState('');
   const [isError, setErrorSearch] = useState(false);
+  const [isTotal, setTotal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch('/api/approved');
       const data = await res.json();
-      setUserTotal(data);
+      setUser(data);
     };
     fetchData();
   }, []);
@@ -56,30 +39,32 @@ const Approved = () => {
   const handleClick = async () => {
     const query = new URLSearchParams();
     if (state.name) {
+      setTotal(false);
       query.set('name', state.name);
     }
     if (state.lastName) {
+      setTotal(false);
       query.set('lastName', state.lastName);
     }
     if (rolSelect === 'todos') {
-      const res = await fetch('/api/approved');
-      const data = await res.json();
-      setUser(data);
+      setTotal(true);
     }
     if (rolSelect !== '' && rolSelect !== 'todos') {
+      setTotal(false);
       query.set('jobRole', rolSelect);
     }
     if (countrySelect === 'todos') {
-      const res = await fetch('/api/approved');
-      const data = await res.json();
-      setUser(data);
+      setTotal(true);
     }
     if (countrySelect !== '' && countrySelect !== 'todos') {
+      setTotal(false);
       query.set('country', countrySelect);
     }
     const res = await fetch(`/api/approved?${query}`);
     const data = await res.json();
-    setUser(data);
+    setUsersSearch(data);
+    const demo = count(data);
+    setTotalMetrics([demo]);
     return setErrorSearch(!data.length);
   };
   const handleDelete = (index, record) => {
@@ -94,7 +79,25 @@ const Approved = () => {
       message.success('Usuario eliminado');
     });
   };
-  const columnsUser = [
+  const columnsMetrics = [
+    {
+      title: 'Total Anestesiólogo',
+      dataIndex: 'totalAnes'
+    },
+    {
+      title: 'Total Residente',
+      dataIndex: 'totalRes'
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total'
+    }
+  ];
+  const columns = [
+    {
+      title: 'País',
+      dataIndex: 'country'
+    },
     {
       title: 'Apellido',
       dataIndex: 'lastName'
@@ -108,52 +111,71 @@ const Approved = () => {
       dataIndex: 'email'
     },
     {
-      title: 'Categoría',
+      title: 'Cat',
       dataIndex: 'jobRole'
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
+      title: 'Eliminar',
+      dataIndex: 'delete',
       // eslint-disable-next-line react/display-name
       render: (text, record, index) => (
         <Popconfirm
           title="¿Estás seguro que desea eliminarlo😧?"
           onConfirm={() => handleDelete(index, record)}
         >
-          <Button type="danger">Delete</Button>
+          <Button type="danger">Eliminar</Button>
         </Popconfirm>
       )
     }
   ];
-  const countResult = count(userTotal);
-  console.log('usuarios result');
-  console.log(countResult);
-  const countArr = [...countResult];
-  console.log('usuarios Arr');
-  console.log(countArr);
-  const dataParser = countArr.map((item, index) => {
-    return {
-      id: index,
-      country: item[0],
-      total: item[1].total,
-      resident: item[1].residente || 0,
-      anesthesiologist: item[1].anestesiólogo || 0
-    };
-  });
-  console.log('dato parseados');
-  console.log(dataParser);
-  const userMetrics = [...dataParser];
-  console.log('datos de la metrica');
-  console.log(userMetrics);
+  const columnsSearch = [
+    {
+      title: 'Apellido',
+      dataIndex: 'lastName'
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'name'
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email'
+    },
+    {
+      title: 'Cat',
+      dataIndex: 'jobRole'
+    },
+    {
+      title: 'Eliminar',
+      dataIndex: 'delete',
+      // eslint-disable-next-line react/display-name
+      render: (text, record, index) => (
+        <Popconfirm
+          title="¿Estás seguro que desea eliminarlo😧?"
+          onConfirm={() => handleDelete(index, record)}
+        >
+          <Button type="danger">Eliminar</Button>
+        </Popconfirm>
+      )
+    }
+  ];
   const firstContent = () => {
-    if (users.length === 0) {
-      return <Table bordered columns={columns} dataSource={userMetrics} />;
+    const dynamicColumns = isTotal === true ? columns : columnsSearch;
+    if (usesrSearch.length) {
+      return (
+        <Table
+          style={{ overflow: 'auto' }}
+          bordered
+          columns={dynamicColumns}
+          dataSource={usesrSearch}
+        />
+      );
     }
     return (
       <Table
         bordered
         style={{ overflow: 'auto' }}
-        columns={columnsUser}
+        columns={columns}
         dataSource={users}
       />
     );
@@ -170,6 +192,13 @@ const Approved = () => {
   const rolCategory = rolJobs.filter(item => {
     return item.label !== 'Todos';
   });
+  const result = count(users);
+  const metrics = [result];
+  console.log('The value of metrics is ');
+  console.log(metrics);
+  console.log('The value totalMetrics is');
+  console.log(totalMetrics);
+  const dynamicMetrics = totalMetrics.length ? totalMetrics : metrics;
   return (
     <Layout tabIndex={1}>
       <Row type="flex" justify="center" style={{ margin: '3em' }}>
@@ -204,7 +233,7 @@ const Approved = () => {
           onChange={handleChange}
         />
         <Select
-          placeholder="Rol..."
+          placeholder="Cat..."
           style={{ width: 120, maxWidth: '60vw' }}
           onChange={value => setRol(value)}
         >
@@ -227,6 +256,15 @@ const Approved = () => {
           type="primary"
           shape="circle"
           icon="search"
+        />
+      </Row>
+      <Row type="flex" justify="center" style={{ margin: '2em' }}>
+        <Table
+          bordered
+          pagination={false}
+          style={{ overflow: 'auto' }}
+          columns={columnsMetrics}
+          dataSource={dynamicMetrics}
         />
       </Row>
       {isError && (
