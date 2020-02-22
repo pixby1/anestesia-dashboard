@@ -11,14 +11,19 @@ import { Layout } from '../components/Dashboard/Layout';
 // Helpers
 import { rolJobs } from '../lib/helper/rolOption';
 import { countries } from '../lib/helper/countryOption';
+import { count } from '../lib/helper/count';
 
 const Dashboard = () => {
+  // state of the data
   const [users, setUser] = useState([]);
   const [usersSearch, setUsersSearch] = useState([]);
+  const [totalMetrics, setTotalMetrics] = useState([]);
+  const [isError, setErrorSearch] = useState(false);
+  const [isTotal, setTotal] = useState(false);
+  // state of the UI
   const [state, setState] = useState({ lastName: '', name: '' });
   const [countrySelect, setCountry] = useState('');
   const [rolSelect, setRol] = useState('');
-  const [isError, setErrorSearch] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch('/api/pending');
@@ -27,6 +32,20 @@ const Dashboard = () => {
     };
     fetchData();
   }, []);
+  const columnsMetrics = [
+    {
+      title: 'Total Anestesiólogo',
+      dataIndex: 'totalAnes'
+    },
+    {
+      title: 'Total Residente',
+      dataIndex: 'totalResident'
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total'
+    }
+  ];
   const columns = [
     {
       title: 'País',
@@ -45,7 +64,7 @@ const Dashboard = () => {
       dataIndex: 'email'
     },
     {
-      title: 'Rol',
+      title: 'Cat',
       dataIndex: 'jobRole'
     },
     {
@@ -99,7 +118,7 @@ const Dashboard = () => {
       dataIndex: 'email'
     },
     {
-      title: 'Categoría',
+      title: 'Cat',
       dataIndex: 'jobRole'
     },
     {
@@ -186,39 +205,42 @@ const Dashboard = () => {
   const handleClick = async () => {
     const query = new URLSearchParams();
     if (state.name) {
+      setTotal(false);
       query.set('name', state.name);
     }
     if (state.lastName) {
+      setTotal(false);
       query.set('lastName', state.lastName);
     }
     if (rolSelect === 'todos') {
-      const res = await fetch('/api/pending');
-      const data = await res.json();
-      setUsersSearch(data);
+      setTotal(true);
     }
     if (rolSelect !== '' && rolSelect !== 'todos') {
+      setTotal(false);
       query.set('jobRole', rolSelect);
     }
     if (countrySelect === 'todos') {
-      const res = await fetch('/api/pending');
-      const data = await res.json();
-      setUsersSearch(data);
+      setTotal(true);
     }
     if (countrySelect !== '' && countrySelect !== 'todos') {
+      setTotal(false);
       query.set('country', countrySelect);
     }
     const res = await fetch(`/api/pending?${query}`);
     const data = await res.json();
     setUsersSearch(data);
+    const demo = count(data);
+    setTotalMetrics([demo]);
     return setErrorSearch(!data.length);
   };
   const firstContent = () => {
+    const dynamicColumns = isTotal === true ? columns : columnsSearch;
     if (usersSearch.length) {
       return (
         <Table
           bordered
           style={{ overflow: 'auto' }}
-          columns={columnsSearch}
+          columns={dynamicColumns}
           dataSource={usersSearch}
         />
       );
@@ -244,6 +266,9 @@ const Dashboard = () => {
   const rolCategory = rolJobs.filter(item => {
     return item.label !== 'Todos';
   });
+  const result = count(users);
+  const metrics = [result];
+  const dynamicMetrics = totalMetrics.length ? totalMetrics : metrics;
   return (
     <Layout>
       <Row type="flex" justify="center" style={{ margin: '3em' }}>
@@ -278,7 +303,7 @@ const Dashboard = () => {
           onChange={handleChange}
         />
         <Select
-          placeholder="Rol..."
+          placeholder="Cat..."
           style={{ width: 120, maxWidth: '60vw' }}
           onChange={value => setRol(value)}
         >
@@ -301,6 +326,15 @@ const Dashboard = () => {
           type="primary"
           shape="circle"
           icon="search"
+        />
+      </Row>
+      <Row type="flex" justify="center" style={{ margin: '2em' }}>
+        <Table
+          bordered
+          pagination={false}
+          style={{ overflow: 'auto' }}
+          columns={columnsMetrics}
+          dataSource={dynamicMetrics}
         />
       </Row>
       {isError && (
