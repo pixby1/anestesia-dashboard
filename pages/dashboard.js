@@ -39,7 +39,7 @@ const Dashboard = () => {
     },
     {
       title: 'Total Residente',
-      dataIndex: 'totalResident'
+      dataIndex: 'totalRes'
     },
     {
       title: 'Total',
@@ -204,27 +204,44 @@ const Dashboard = () => {
   };
   const handleClick = async () => {
     const query = new URLSearchParams();
-    if (state.name) {
-      setTotal(false);
-      query.set('name', state.name);
-    }
-    if (state.lastName) {
-      setTotal(false);
-      query.set('lastName', state.lastName);
-    }
-    if (rolSelect === 'todos') {
+    if (countrySelect === 'todos') {
       setTotal(true);
     }
-    if (rolSelect !== '' && rolSelect !== 'todos') {
-      setTotal(false);
-      query.set('jobRole', rolSelect);
-    }
-    if (countrySelect === 'todos') {
+    if (countrySelect === '') {
       setTotal(true);
     }
     if (countrySelect !== '' && countrySelect !== 'todos') {
       setTotal(false);
       query.set('country', countrySelect);
+    }
+    if (state.name && countrySelect === '') {
+      setTotal(true);
+      query.set('name', state.name);
+    }
+    if (state.name && countrySelect !== '') {
+      setTotal(false);
+      query.set('name', state.name);
+    }
+    if (state.lastName && countrySelect === '') {
+      setTotal(true);
+      query.set('lastName', state.lastName);
+    }
+    if (state.lastName && countrySelect !== '') {
+      setTotal(false);
+      query.set('lastName', state.lastName);
+    }
+    if (rolSelect === 'todos') {
+      console.log('RolSelect tiene valor de todos');
+      setTotal(true);
+    }
+    if (rolSelect !== '' && rolSelect !== 'todos' && countrySelect === '') {
+      console.log('RolSelect tiene un valor sea resident o aneste');
+      setTotal(true);
+      query.set('jobRole', rolSelect);
+    }
+    if (rolSelect !== '' && rolSelect !== 'todos' && countrySelect !== '') {
+      setTotal(false);
+      query.set('jobRole', rolSelect);
     }
     const res = await fetch(`/api/pending?${query}`);
     const data = await res.json();
@@ -255,16 +272,16 @@ const Dashboard = () => {
     );
   };
   const notCountries = countries.filter(item => {
-    return item.label === 'Todos';
+    return item.label === 'Socios Clasa';
   });
   const countrieList = countries.filter(item => {
-    return item.label !== 'Todos';
+    return item.label !== 'Socios Clasa';
   });
   const rolAll = rolJobs.filter(item => {
-    return item.label === 'Todos';
+    return item.label === 'Socios Clasa';
   });
   const rolCategory = rolJobs.filter(item => {
-    return item.label !== 'Todos';
+    return item.label !== 'Socios Clasa';
   });
   const result = count(users);
   const metrics = [result];
