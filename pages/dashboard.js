@@ -1,7 +1,6 @@
-/* eslint-disable react/display-name */
 // Packages
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Row, Select, Input, Popconfirm, message } from 'antd';
+import { Table, Input, Select, Button, Row, Popconfirm, message } from 'antd';
 
 const { Option, OptGroup } = Select;
 
@@ -9,95 +8,65 @@ const { Option, OptGroup } = Select;
 import { Layout } from '../components/Dashboard/Layout';
 
 // Helpers
-import { rolJobs } from '../lib/helper/rolOption';
-import { countries } from '../lib/helper/countryOption';
-import { count } from '../lib/helper/count';
+import { count, stats } from '../lib/helper/count';
+import { countriesApproved } from '../lib/helper/countryOption';
+import { rolJobsApproved } from '../lib/helper/rolOption';
+import {
+  statsColumn,
+  totalDynamicColumn,
+  totalClassColumn
+} from '../lib/helper/columns';
 
 const Dashboard = () => {
-  // state of the data
   const [users, setUser] = useState([]);
-  const [usersSearch, setUsersSearch] = useState([]);
+  const [usesrSearch, setUsersSearch] = useState([]);
   const [totalMetrics, setTotalMetrics] = useState([]);
+  const [statsUser, setStatsUser] = useState([]);
+  const [state, setState] = useState({ lastName: '', name: '' });
+  const [countrySelect, setCountry] = useState('totalClass');
+  const [rolSelect, setRol] = useState('');
   const [isError, setErrorSearch] = useState(false);
   const [isTotal, setTotal] = useState(false);
-  // state of the UI
-  const [state, setState] = useState({ lastName: '', name: '' });
-  const [countrySelect, setCountry] = useState('');
-  const [rolSelect, setRol] = useState('');
+  const [isMetric, setMetric] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('/api/pending');
+      const res = await fetch('/api/approved');
       const data = await res.json();
-      setUser(data);
+      const sortData = data.sort((a, b) => (a.country < b.country ? -1 : 1));
+      setUser(sortData);
+      setStatsUser(sortData);
     };
     fetchData();
   }, []);
-  const columnsMetrics = [
-    {
-      title: 'Total Anestesiólogo',
-      dataIndex: 'totalAnes'
-    },
-    {
-      title: 'Total Residente',
-      dataIndex: 'totalRes'
-    },
-    {
-      title: 'Total',
-      dataIndex: 'total'
-    }
-  ];
   const columns = [
     {
-      title: 'País',
+      title: 'PAÍS',
       dataIndex: 'country'
     },
     {
-      title: 'Apellido',
+      title: 'APELLIDO',
       dataIndex: 'lastName'
     },
     {
-      title: 'Nombre',
+      title: 'NOMBRE',
       dataIndex: 'name'
     },
     {
-      title: 'Email',
+      title: 'EMAIL',
       dataIndex: 'email'
     },
     {
-      title: 'Cat',
+      title: 'CAT',
       dataIndex: 'jobRole'
     },
     {
-      title: 'Confirmar',
-      dataIndex: 'Confirm',
-      render: (text, record, index) => (
-        <Popconfirm
-          title="¿Enviar email?"
-          onConfirm={() => confirmUser(index, record)}
-        >
-          <Button type="default">Confirmar</Button>
-        </Popconfirm>
-      )
-    },
-    {
-      title: 'Aprobado',
-      dataIndex: 'Approved',
-      render: (text, record, index) => (
-        <Popconfirm
-          title="¿Quieres aprobar este usuario?😌"
-          onConfirm={() => approvedUser(index, record)}
-        >
-          <Button type="primary">Aprobar</Button>
-        </Popconfirm>
-      )
-    },
-    {
-      title: 'Eliminar',
-      dataIndex: 'Delete',
+      title: 'ELIMINAR',
+      dataIndex: 'delete',
+      // eslint-disable-next-line react/display-name
       render: (text, record, index) => (
         <Popconfirm
           title="¿Estás seguro que desea eliminarlo😧?"
-          onConfirm={() => removeUser(index, record)}
+          onConfirm={() => handleDelete(index, record)}
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
@@ -106,97 +75,37 @@ const Dashboard = () => {
   ];
   const columnsSearch = [
     {
-      title: 'Apellido',
+      title: 'APELLIDO',
       dataIndex: 'lastName'
     },
     {
-      title: 'Nombre',
+      title: 'NOMBRE',
       dataIndex: 'name'
     },
     {
-      title: 'Email',
+      title: 'EMAIL',
       dataIndex: 'email'
     },
     {
-      title: 'Cat',
+      title: 'CAT',
       dataIndex: 'jobRole'
     },
     {
-      title: 'Confirmar',
-      dataIndex: 'Confirm',
-      render: (text, record, index) => (
-        <Popconfirm
-          title="¿Enviar email?"
-          onConfirm={() => confirmUser(index, record)}
-        >
-          <Button type="default">Confirmar</Button>
-        </Popconfirm>
-      )
-    },
-    {
-      title: 'Aprobado',
-      dataIndex: 'Approved',
-      render: (text, record, index) => (
-        <Popconfirm
-          title="¿Quieres aprobar este usuario?😌"
-          onConfirm={() => approvedUser(index, record)}
-        >
-          <Button type="primary">Aprobar</Button>
-        </Popconfirm>
-      )
-    },
-    {
-      title: 'Eliminar',
-      dataIndex: 'Delete',
+      title: 'ELIMINAR',
+      dataIndex: 'delete',
+      // eslint-disable-next-line react/display-name
       render: (text, record, index) => (
         <Popconfirm
           title="¿Estás seguro que desea eliminarlo😧?"
-          onConfirm={() => removeUser(index, record)}
+          onConfirm={() => handleDelete(index, record)}
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
       )
     }
   ];
-  const approvedUser = (index, record) => {
-    fetch('/api/pending', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: record._id, state: 'APPROVED' })
-    }).then(() => {
-      const removeItem = [...users];
-      removeItem.splice(index, 1);
-      setUser(removeItem);
-      message.success('Usuario aprobado');
-    });
-  };
-  const confirmUser = (index, record) => {
-    const name = `${record.name} ${record.lastName}`;
-    fetch('https://registry.anestesiaclasa.org/api/email-association', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        society: record.society
-      })
-    }).then(() => {
-      message.success('Email a la sociedad📩');
-    });
-  };
-  const removeUser = (index, record) => {
-    fetch('/api/removeUser', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: record._id, userRemove: true })
-    }).then(() => {
-      const removeItem = [...users];
-      removeItem.splice(index, 1);
-      setUser(removeItem);
-      message.success('Usuario eliminado');
-    });
-  };
   const handleChange = event => {
-    const { name, value } = event.target;
+    const { value, name } = event.target;
     setState({
       ...state,
       [name]: value
@@ -243,22 +152,36 @@ const Dashboard = () => {
       setTotal(false);
       query.set('jobRole', rolSelect);
     }
-    const res = await fetch(`/api/pending?${query}`);
+    const res = await fetch(`/api/approved?${query}`);
     const data = await res.json();
-    setUsersSearch(data);
-    const demo = count(data);
+    const sortData = data.sort((a, b) => (a.country < b.country ? -1 : 1));
+    setUsersSearch(sortData);
+    const demo = count(sortData);
     setTotalMetrics([demo]);
-    return setErrorSearch(!data.length);
+    setMetric(true);
+    return setErrorSearch(!sortData.length);
+  };
+  const handleDelete = (index, record) => {
+    fetch('/api/removeUser', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: record._id, userRemove: true })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+      message.success('Usuario eliminado');
+    });
   };
   const firstContent = () => {
     const dynamicColumns = isTotal === true ? columns : columnsSearch;
-    if (usersSearch.length) {
+    if (usesrSearch.length) {
       return (
         <Table
-          bordered
           style={{ overflow: 'auto' }}
+          bordered
           columns={dynamicColumns}
-          dataSource={usersSearch}
+          dataSource={usesrSearch}
         />
       );
     }
@@ -271,36 +194,109 @@ const Dashboard = () => {
       />
     );
   };
-  const notCountries = countries.filter(item => {
-    return item.label === 'Socios Clasa';
+  const showStats = () => {
+    const result = stats(statsUser);
+    const resultArray = [...result];
+    const dummy = resultArray.map((item, index) => {
+      return {
+        id: index,
+        country: item[0],
+        total: item[1].total,
+        resident: item[1].residente || 0,
+        anesthesiologist: item[1].anestesiólogo || 0
+      };
+    });
+    const finallyData = [...dummy];
+    if (countrySelect === 'totalClass') {
+      return <Table bordered columns={statsColumn} dataSource={finallyData} />;
+    } else {
+      const result = count(users);
+      const metrics = [result];
+      console.log('The value of metrics is ');
+      console.log(metrics);
+      console.log('The value totalMetrics is');
+      console.log(totalMetrics);
+      const dynamicMetrics = totalMetrics.length ? totalMetrics : metrics;
+      return (
+        <>
+          <Row type="flex" justify="center" style={{ margin: '2em' }}>
+            {isMetric && (
+              <Table
+                bordered
+                pagination={false}
+                style={{ overflow: 'auto' }}
+                columns={totalDynamicColumn}
+                dataSource={dynamicMetrics}
+              />
+            )}
+          </Row>
+          {isError && (
+            <Row type="flex" justify="center" style={{ margin: '3em' }}>
+              <h1>No se encontraron datos en la busqueda 🥺</h1>
+            </Row>
+          )}
+          {firstContent()}
+        </>
+      );
+    }
+  };
+  const notCountries = countriesApproved.filter(item => {
+    return item.label === 'Socios CLASA';
   });
-  const countrieList = countries.filter(item => {
-    return item.label !== 'Socios Clasa';
+  const statsCountries = countriesApproved.filter(item => {
+    return item.label === 'Totales CLASA';
   });
-  const rolAll = rolJobs.filter(item => {
-    return item.label === 'Socios Clasa';
+  const countrieList = countriesApproved.filter(item => {
+    return item.label !== 'Socios CLASA';
   });
-  const rolCategory = rolJobs.filter(item => {
-    return item.label !== 'Socios Clasa';
+  const listCountries = countrieList.filter(item => {
+    return item.label !== 'Totales CLASA';
+  });
+  const rolAll = rolJobsApproved.filter(item => {
+    return item.label === 'Socios CLASA';
+  });
+  const rolCategory = rolJobsApproved.filter(item => {
+    return item.label !== 'Socios CLASA';
   });
   const result = count(users);
   const metrics = [result];
-  const dynamicMetrics = totalMetrics.length ? totalMetrics : metrics;
   return (
     <Layout>
+      <Row type="flex" justify="center" style={{ margin: '2em' }}>
+        <Table
+          bordered
+          pagination={false}
+          style={{ overflow: 'auto' }}
+          columns={totalClassColumn}
+          dataSource={metrics}
+        />
+      </Row>
       <Row type="flex" justify="center" style={{ margin: '3em' }}>
         <Select
+          defaultValue="totalClass"
           placeholder="País..."
           style={{ marginRight: 8, width: 120, maxWidth: '60vw' }}
-          onChange={selectValue => setCountry(selectValue)}
+          onChange={selectValue => {
+            setMetric(false);
+            setCountry(selectValue);
+          }}
         >
-          {notCountries.map((item, index) => (
-            <Option key={index} value={item.value}>
-              {item.label}
-            </Option>
-          ))}
+          <OptGroup label="Estadisticas">
+            {statsCountries.map((item, index) => (
+              <Option key={index} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </OptGroup>
+          <OptGroup label="Todos">
+            {notCountries.map((item, index) => (
+              <Option key={index} value={item.value}>
+                {item.label}
+              </Option>
+            ))}
+          </OptGroup>
           <OptGroup label="Países">
-            {countrieList.map((item, index) => (
+            {listCountries.map((item, index) => (
               <Option key={index} value={item.value}>
                 {item.label}
               </Option>
@@ -345,21 +341,7 @@ const Dashboard = () => {
           icon="search"
         />
       </Row>
-      <Row type="flex" justify="center" style={{ margin: '2em' }}>
-        <Table
-          bordered
-          pagination={false}
-          style={{ overflow: 'auto' }}
-          columns={columnsMetrics}
-          dataSource={dynamicMetrics}
-        />
-      </Row>
-      {isError && (
-        <Row type="flex" justify="center" style={{ margin: '3em' }}>
-          <h1>No se encontraron datos en la busqueda 😑</h1>
-        </Row>
-      )}
-      {firstContent()}
+      {showStats()}
     </Layout>
   );
 };
