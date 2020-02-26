@@ -1,6 +1,7 @@
+/* eslint-disable react/display-name */
 // Packages
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Select, Button, Row, Popconfirm, message } from 'antd';
+import { Table, Button, Row, Select, Input, Popconfirm, message } from 'antd';
 
 const { Option, OptGroup } = Select;
 
@@ -8,33 +9,28 @@ const { Option, OptGroup } = Select;
 import { Layout } from '../components/Dashboard/Layout';
 
 // Helpers
-import { count, stats } from '../lib/helper/count';
-import { countriesApproved } from '../lib/helper/countryOption';
-import { rolJobsApproved } from '../lib/helper/rolOption';
-import {
-  statsColumn,
-  totalDynamicColumn,
-  totalClassColumn
-} from '../lib/helper/columns';
+import { rolJobsPending } from '../lib/helper/rolOption';
+import { countriesPending } from '../lib/helper/countryOption';
+import { count } from '../lib/helper/count';
+import { totalDynamicColumn, totalPendingColumn } from '../lib/helper/columns';
 
-const Dashboard = () => {
+const Pending = () => {
+  // state of the data
   const [users, setUser] = useState([]);
-  const [usesrSearch, setUsersSearch] = useState([]);
+  const [usersSearch, setUsersSearch] = useState([]);
   const [totalMetrics, setTotalMetrics] = useState([]);
-  const [statsUser, setStatsUser] = useState([]);
-  const [state, setState] = useState({ lastName: '', name: '' });
-  const [countrySelect, setCountry] = useState('totalClass');
-  const [rolSelect, setRol] = useState('');
   const [isError, setErrorSearch] = useState(false);
   const [isTotal, setTotal] = useState(false);
-  const [isMetric, setMetric] = useState(false);
+  // state of the UI
+  const [state, setState] = useState({ lastName: '', name: '' });
+  const [countrySelect, setCountry] = useState('');
+  const [rolSelect, setRol] = useState('');
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('/api/approved');
+      const res = await fetch('/api/pending');
       const data = await res.json();
       const sortData = data.sort((a, b) => (a.country < b.country ? -1 : 1));
       setUser(sortData);
-      setStatsUser(sortData);
     };
     fetchData();
   }, []);
@@ -60,13 +56,36 @@ const Dashboard = () => {
       dataIndex: 'jobRole'
     },
     {
+      title: 'CONFIRMAR',
+      dataIndex: 'Confirm',
+      render: (text, record, index) => (
+        <Popconfirm
+          title="¿Enviar email?"
+          onConfirm={() => confirmUser(index, record)}
+        >
+          <Button type="default">Confirmar</Button>
+        </Popconfirm>
+      )
+    },
+    {
+      title: 'APROBADO',
+      dataIndex: 'Approved',
+      render: (text, record, index) => (
+        <Popconfirm
+          title="¿Quieres aprobar este usuario?😌"
+          onConfirm={() => approvedUser(index, record)}
+        >
+          <Button type="primary">Aprobar</Button>
+        </Popconfirm>
+      )
+    },
+    {
       title: 'ELIMINAR',
-      dataIndex: 'delete',
-      // eslint-disable-next-line react/display-name
+      dataIndex: 'Delete',
       render: (text, record, index) => (
         <Popconfirm
           title="¿Estás seguro que desea eliminarlo😧?"
-          onConfirm={() => handleDelete(index, record)}
+          onConfirm={() => removeUser(index, record)}
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
@@ -79,7 +98,7 @@ const Dashboard = () => {
       dataIndex: 'lastName'
     },
     {
-      title: 'NOMBRE',
+      title: 'NOMBRES',
       dataIndex: 'name'
     },
     {
@@ -91,21 +110,81 @@ const Dashboard = () => {
       dataIndex: 'jobRole'
     },
     {
+      title: 'CONFIRMAR',
+      dataIndex: 'Confirm',
+      render: (text, record, index) => (
+        <Popconfirm
+          title="¿Enviar email?"
+          onConfirm={() => confirmUser(index, record)}
+        >
+          <Button type="default">Confirmar</Button>
+        </Popconfirm>
+      )
+    },
+    {
+      title: 'APROBADO',
+      dataIndex: 'Approved',
+      render: (text, record, index) => (
+        <Popconfirm
+          title="¿Quieres aprobar este usuario?😌"
+          onConfirm={() => approvedUser(index, record)}
+        >
+          <Button type="primary">Aprobar</Button>
+        </Popconfirm>
+      )
+    },
+    {
       title: 'ELIMINAR',
-      dataIndex: 'delete',
-      // eslint-disable-next-line react/display-name
+      dataIndex: 'Delete',
       render: (text, record, index) => (
         <Popconfirm
           title="¿Estás seguro que desea eliminarlo😧?"
-          onConfirm={() => handleDelete(index, record)}
+          onConfirm={() => removeUser(index, record)}
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
       )
     }
   ];
+  const approvedUser = (index, record) => {
+    fetch('/api/pending', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: record._id, state: 'APPROVED' })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+      message.success('Usuario aprobado');
+    });
+  };
+  const confirmUser = (index, record) => {
+    const name = `${record.name} ${record.lastName}`;
+    fetch('https://registry.anestesiaclasa.org/api/email-association', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        society: record.society
+      })
+    }).then(() => {
+      message.success('Email a la sociedad📩');
+    });
+  };
+  const removeUser = (index, record) => {
+    fetch('/api/removeUser', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: record._id, userRemove: true })
+    }).then(() => {
+      const removeItem = [...users];
+      removeItem.splice(index, 1);
+      setUser(removeItem);
+      message.success('Usuario eliminado');
+    });
+  };
   const handleChange = event => {
-    const { value, name } = event.target;
+    const { name, value } = event.target;
     setState({
       ...state,
       [name]: value
@@ -152,36 +231,23 @@ const Dashboard = () => {
       setTotal(false);
       query.set('jobRole', rolSelect);
     }
-    const res = await fetch(`/api/approved?${query}`);
+    const res = await fetch(`/api/pending?${query}`);
     const data = await res.json();
     const sortData = data.sort((a, b) => (a.country < b.country ? -1 : 1));
     setUsersSearch(sortData);
     const demo = count(sortData);
     setTotalMetrics([demo]);
-    setMetric(true);
     return setErrorSearch(!sortData.length);
-  };
-  const handleDelete = (index, record) => {
-    fetch('/api/removeUser', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: record._id, userRemove: true })
-    }).then(() => {
-      const removeItem = [...users];
-      removeItem.splice(index, 1);
-      setUser(removeItem);
-      message.success('Usuario eliminado');
-    });
   };
   const firstContent = () => {
     const dynamicColumns = isTotal === true ? columns : columnsSearch;
-    if (usesrSearch.length) {
+    if (usersSearch.length) {
       return (
         <Table
-          style={{ overflow: 'auto' }}
           bordered
+          style={{ overflow: 'auto' }}
           columns={dynamicColumns}
-          dataSource={usesrSearch}
+          dataSource={usersSearch}
         />
       );
     }
@@ -194,100 +260,38 @@ const Dashboard = () => {
       />
     );
   };
-  const showStats = () => {
-    const result = stats(statsUser);
-    const resultArray = [...result];
-    const dummy = resultArray.map((item, index) => {
-      return {
-        id: index,
-        country: item[0],
-        total: item[1].total,
-        resident: item[1].residente || 0,
-        anesthesiologist: item[1].anestesiólogo || 0
-      };
-    });
-    const finallyData = [...dummy];
-    if (countrySelect === 'totalClass') {
-      return <Table bordered columns={statsColumn} dataSource={finallyData} />;
-    } else {
-      const result = count(users);
-      const metrics = [result];
-      console.log('The value of metrics is ');
-      console.log(metrics);
-      console.log('The value totalMetrics is');
-      console.log(totalMetrics);
-      const dynamicMetrics = totalMetrics.length ? totalMetrics : metrics;
-      return (
-        <>
-          <Row type="flex" justify="center" style={{ margin: '2em' }}>
-            {isMetric && (
-              <Table
-                bordered
-                pagination={false}
-                style={{ overflow: 'auto' }}
-                columns={totalDynamicColumn}
-                dataSource={dynamicMetrics}
-              />
-            )}
-          </Row>
-          {isError && (
-            <Row type="flex" justify="center" style={{ margin: '3em' }}>
-              <h1>No se encontraron datos en la busqueda 🥺</h1>
-            </Row>
-          )}
-          {firstContent()}
-        </>
-      );
-    }
-  };
-  const notCountries = countriesApproved.filter(item => {
-    return item.label === 'Socios CLASA';
+  const notCountries = countriesPending.filter(item => {
+    return item.label === 'PENDIENTES';
   });
-  const statsCountries = countriesApproved.filter(item => {
-    return item.label === 'Totales CLASA';
+  const countrieList = countriesPending.filter(item => {
+    return item.label !== 'PENDIENTES';
   });
-  const countrieList = countriesApproved.filter(item => {
-    return item.label !== 'Socios CLASA';
+  const rolAll = rolJobsPending.filter(item => {
+    return item.label === 'PENDIENTES';
   });
-  const listCountries = countrieList.filter(item => {
-    return item.label !== 'Totales CLASA';
-  });
-  const rolAll = rolJobsApproved.filter(item => {
-    return item.label === 'Socios CLASA';
-  });
-  const rolCategory = rolJobsApproved.filter(item => {
-    return item.label !== 'Socios CLASA';
+  const rolCategory = rolJobsPending.filter(item => {
+    return item.label !== 'PENDIENTES';
   });
   const result = count(users);
   const metrics = [result];
+  const dynamicMetrics = totalMetrics.length ? totalMetrics : metrics;
   return (
-    <Layout>
+    <Layout tabIndex={1}>
       <Row type="flex" justify="center" style={{ margin: '2em' }}>
         <Table
           bordered
           pagination={false}
           style={{ overflow: 'auto' }}
-          columns={totalClassColumn}
+          columns={totalPendingColumn}
           dataSource={metrics}
         />
       </Row>
       <Row type="flex" justify="center" style={{ margin: '3em' }}>
         <Select
-          defaultValue="totalClass"
           placeholder="País..."
           style={{ marginRight: 8, width: 120, maxWidth: '60vw' }}
-          onChange={selectValue => {
-            setMetric(false);
-            setCountry(selectValue);
-          }}
+          onChange={selectValue => setCountry(selectValue)}
         >
-          <OptGroup label="Estadisticas">
-            {statsCountries.map((item, index) => (
-              <Option key={index} value={item.value}>
-                {item.label}
-              </Option>
-            ))}
-          </OptGroup>
           <OptGroup label="Todos">
             {notCountries.map((item, index) => (
               <Option key={index} value={item.value}>
@@ -296,7 +300,7 @@ const Dashboard = () => {
             ))}
           </OptGroup>
           <OptGroup label="Países">
-            {listCountries.map((item, index) => (
+            {countrieList.map((item, index) => (
               <Option key={index} value={item.value}>
                 {item.label}
               </Option>
@@ -341,9 +345,23 @@ const Dashboard = () => {
           icon="search"
         />
       </Row>
-      {showStats()}
+      <Row type="flex" justify="center" style={{ margin: '2em' }}>
+        <Table
+          bordered
+          pagination={false}
+          style={{ overflow: 'auto' }}
+          columns={totalDynamicColumn}
+          dataSource={dynamicMetrics}
+        />
+      </Row>
+      {isError && (
+        <Row type="flex" justify="center" style={{ margin: '3em' }}>
+          <h1>No se encontraron datos en la busqueda 😑</h1>
+        </Row>
+      )}
+      {firstContent()}
     </Layout>
   );
 };
 
-export default Dashboard;
+export default Pending;

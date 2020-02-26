@@ -37,8 +37,8 @@ const Layout = ({ children, tabIndex }) => {
       </Flex>
       <Tabs index={tabIndex} isFitted>
         <TabList>
-          <Tab onClick={() => router.push('/')}>usuarios pendientes</Tab>
-          <Tab onClick={() => router.push('/approved')}>usuarios aprobados</Tab>
+          <Tab onClick={() => router.push('/')}>CLASA</Tab>
+          <Tab onClick={() => router.push('/pending')}>USUARIOS PENDIENTES</Tab>
         </TabList>
       </Tabs>
       {children}
