@@ -44,6 +44,10 @@ const Dashboard = () => {
       dataIndex: 'country'
     },
     {
+      title: 'CIUDAD',
+      dataIndex: 'city'
+    },
+    {
       title: 'APELLIDO',
       dataIndex: 'lastName'
     },
@@ -52,8 +56,20 @@ const Dashboard = () => {
       dataIndex: 'name'
     },
     {
+      title: 'FECHA DE NACIMIENTO',
+      dataIndex: 'birthday'
+    },
+    {
       title: 'EMAIL',
       dataIndex: 'email'
+    },
+    {
+      title: 'TELÉFONO',
+      dataIndex: 'phone'
+    },
+    {
+      title: 'GENERO',
+      dataIndex: 'gender'
     },
     {
       title: 'CAT',
@@ -75,6 +91,10 @@ const Dashboard = () => {
   ];
   const columnsSearch = [
     {
+      title: 'CIUDAD',
+      dataIndex: 'city'
+    },
+    {
       title: 'APELLIDO',
       dataIndex: 'lastName'
     },
@@ -83,8 +103,20 @@ const Dashboard = () => {
       dataIndex: 'name'
     },
     {
+      title: 'FECHA DE NACIMIENTO',
+      dataIndex: 'birthday'
+    },
+    {
       title: 'EMAIL',
       dataIndex: 'email'
+    },
+    {
+      title: 'TELÉFONO',
+      dataIndex: 'phone'
+    },
+    {
+      title: 'GENERO',
+      dataIndex: 'gender'
     },
     {
       title: 'CAT',

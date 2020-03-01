@@ -40,6 +40,10 @@ const Pending = () => {
       dataIndex: 'country'
     },
     {
+      title: 'CIUDAD',
+      dataIndex: 'city'
+    },
+    {
       title: 'APELLIDO',
       dataIndex: 'lastName'
     },
@@ -48,8 +52,20 @@ const Pending = () => {
       dataIndex: 'name'
     },
     {
+      title: 'FECHA DE NACIMIENTO',
+      dataIndex: 'birthday'
+    },
+    {
       title: 'EMAIL',
       dataIndex: 'email'
+    },
+    {
+      title: 'TELÉFONO',
+      dataIndex: 'phone'
+    },
+    {
+      title: 'GENERO',
+      dataIndex: 'gender'
     },
     {
       title: 'CAT',
@@ -94,16 +110,32 @@ const Pending = () => {
   ];
   const columnsSearch = [
     {
+      title: 'CIUDAD',
+      dataIndex: 'city'
+    },
+    {
       title: 'APELLIDO',
       dataIndex: 'lastName'
     },
     {
-      title: 'NOMBRES',
+      title: 'NOMBRE',
       dataIndex: 'name'
+    },
+    {
+      title: 'FECHA DE NACIMIENTO',
+      dataIndex: 'birthday'
     },
     {
       title: 'EMAIL',
       dataIndex: 'email'
+    },
+    {
+      title: 'TELÉFONO',
+      dataIndex: 'phone'
+    },
+    {
+      title: 'GENERO',
+      dataIndex: 'gender'
     },
     {
       title: 'CAT',
