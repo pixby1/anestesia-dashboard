@@ -16,8 +16,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).end();
   }
   if (req.method === 'POST') {
-    const { name, lastName, email, jobRole, country, society, date } = req.body;
-    const user = new User({ name, lastName, email, jobRole, country, society, date });
+    const { name, lastName, birthday, email, phone, gender, jobRole, country, city, society, date } = req.body;
+    const user = new User({ name, lastName, birthday, email, phone, gender, jobRole, country, city, society, date });
     await user.save();
     return res.status(200).end();
   }
