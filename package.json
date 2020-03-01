@@ -7,9 +7,9 @@
   "license": "MIT",
   "dependencies": {
     "@chakra-ui/core": "^0.6.1",
-    "@emotion/core": "^10.0.27",
+    "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "antd": "^3.26.12",
+    "antd": "^4.0.0",
     "cookies": "^0.8.0",
     "emotion-theming": "^10.0.27",
     "jsonwebtoken": "^8.5.1",
@@ -21,10 +21,10 @@
   },
   "devDependencies": {
     "@types/cookies": "^0.7.4",
-    "@types/jsonwebtoken": "^8.3.7",
-    "@types/mongoose": "^5.7.2",
+    "@types/jsonwebtoken": "^8.3.8",
+    "@types/mongoose": "^5.7.3",
     "@types/ms": "^0.7.31",
-    "@types/node": "^13.7.6",
+    "@types/node": "^13.7.7",
     "@types/react": "^16.9.23",
     "bluebird": "^3.7.1",
     "eslint": "^6.8.0",
@@ -36,7 +36,7 @@
     "lint-staged": "^10.0.8",
     "ms": "^2.1.2",
     "prettier": "^1.19.1",
-    "typescript": "^3.8.2"
+    "typescript": "^3.8.3"
   },
   "husky": {
     "hooks": {
