@@ -19,10 +19,22 @@ const userSchema = new Schema({
     type: String,
     required: [true, "the lastName is mandatory"]
   },
+  birthday: {
+    type: String,
+    required: [true, "the birthday is mandatory"]
+  },
   email: {
     type: String,
     unique: true,
     required: [true, "the email is mandatory"]
+  },
+  phone: {
+    type: String,
+    required: [true, "the phone is mandatory"]
+  },
+  gender: {
+    type: String,
+    required: [true, "the gender is mandatory"]
   },
   jobRole: {
     type: String,
@@ -31,6 +43,10 @@ const userSchema = new Schema({
   country: {
     type: String,
     required: [true, "the country is mandatory"]
+  },
+  city: {
+    type: String,
+    required: [true, "the city is mandatory"]
   },
   society: {
     type: String,
