@@ -1648,11 +1648,10 @@ ansi-styles@^4.1.0:
   dependencies:
     "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
-
-antd@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-4.0.0.tgz#1566ee4a4c9ff5deb446cc3ce7604d4495fd2d38"
-  integrity sha512-sfaxNqqtaGg+5JWucSPM0Nr3eBh5gUBlmsH5RqdtpcP5qTM2NOxcmhx3I8KlSs5O39jAZ6nRVmjubjpw3GS5oQ==
+antd@3.26.12:
+  version "3.26.12"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.26.12.tgz#2f075670780ac0490b2945d8bca883edcd93158c"
+  integrity sha512-aXiRDDpDx1jH/gKJDE2dgZPT1C7qurOZ1OSt9RklQT2K6CFlveF8HJY7Jz1/xHikXA+kmy6kr/OACJiaxBFRkA
   dependencies:
     "@ant-design/icons" "^4.0.0-rc.0"
     "@ant-design/react-slick" "~0.25.5"
@@ -2677,17 +2676,10 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
-copy-to-clipboard@3.3.1:
+copy-to-clipboard@3.3.1, copy-to-clipboard@^3.2.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.3.1.tgz#115aa1a9998ffab6196f93076ad6da3b913662ae"
   integrity sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==
-  dependencies:
-    toggle-selection "^1.0.6"
-
-copy-to-clipboard@^3.2.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.2.1.tgz#b1a1137100e5665d5a96015cb579e30e90e07c44"
-  integrity sha512-btru1Q6RD9wbonIvEU5EfnhIRGHLo//BGXQ1hNAD2avIs/nBZlpbOeKtv3mhoUByN4DB9Cb6/vXBymj1S43KmA==
   dependencies:
     toggle-selection "^1.0.6"
 
@@ -4389,6 +4381,10 @@ is-glob@^4.0.0, is-glob@^4.0.1, is-glob@~4.0.1:
   dependencies:
     is-extglob "^2.1.1"
 
+is-mobile@^2.1.0:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/is-mobile/-/is-mobile-2.2.1.tgz#10f2320012c410cc285feecb13406bd586f1b2f8"
+  integrity sha512-6zELsfVFr326eq2CI53yvqq6YBanOxKBybwDT+MbMS2laBnK6Ez8m5XHSuTQQbnKRfpDzCod1CMWW5q3wZYMvA==
 is-number@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-3.0.0.tgz#24fd6201a4782cf50561c810276afc7d12d71195"
@@ -6502,10 +6498,10 @@ rc-align@^3.0.0-rc.0:
     rc-util "^4.12.0"
     resize-observer-polyfill "^1.5.1"
 
-rc-animate@2.x, rc-animate@^2.10.1, rc-animate@^2.10.2:
-  version "2.10.2"
-  resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.10.2.tgz#217fdc76ff26cbf425a5caf87cc8a36ba4598456"
-  integrity sha512-cE/A7piAzoWFSgUD69NmmMraqCeqVBa51UErod8NS3LUEqWfppSVagHfa0qHAlwPVPiIBg3emRONyny3eiH0Dg==
+rc-animate@2.x, rc-animate@^2.10.1, rc-animate@^2.10.2, rc-animate@^2.3.0, rc-animate@^2.6.0, rc-animate@^2.8.2:
+  version "2.10.3"
+  resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.10.3.tgz#163d5e29281a4ff82d53ee7918eeeac856b756f9"
+  integrity sha512-A9qQ5Y8BLlM7EhuCO3fWb/dChndlbWtY/P5QvPqBU7h4r5Q2QsvsbpTGgdYZATRDZbTRnJXXfVk9UtlyS7MBLg==
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.6"
@@ -6607,7 +6603,7 @@ rc-hammerjs@~0.6.0:
     hammerjs "^2.0.8"
     prop-types "^15.5.9"
 
-rc-input-number@~4.5.4:
+rc-input-number@~4.5.0:
   version "4.5.6"
   resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-4.5.6.tgz#0d52762b0ac39432256e2c6c5c836102f9797c46"
   integrity sha512-AXbL4gtQ1mSQnu6v/JtMv3UbGRCzLvQznmf0a7U/SAtZ8+dCEAqD4JpJhkjv73Wog53eRYhw4l7ApdXflc9ymg==
@@ -6651,10 +6647,10 @@ rc-notification@~4.0.0:
     rc-animate "2.x"
     rc-util "^4.0.4"
 
-rc-pagination@~2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/rc-pagination/-/rc-pagination-2.0.1.tgz#40deddb43173d951e2449c7d3f9951890f477ba1"
-  integrity sha512-jvLb05p1OEBUxRobWFjnrj6vRyvhG8XHouK6qh+eepCHPo7HDzUHHztvUUAWr5f+WnKldAXqdPcGgbM4rCH1OA==
+rc-pagination@~1.20.11:
+  version "1.20.14"
+  resolved "https://registry.yarnpkg.com/rc-pagination/-/rc-pagination-1.20.14.tgz#981c125ebedbe7fe6782bd311f8bb9c99eb0cded"
+  integrity sha512-sNKwbFrxiqATqcIIShfrFs8BT03n4UUwTAMYae+JhHTmILQmXdvimEnZbVuWcno6G02DAJcLrFpmkn1h2tmEJw
   dependencies:
     classnames "^2.2.1"
 
@@ -6677,7 +6673,7 @@ rc-progress@~2.5.0:
     babel-runtime "6.x"
     prop-types "^15.5.8"
 
-rc-rate@~2.5.1:
+rc-rate@~2.5.0:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/rc-rate/-/rc-rate-2.5.1.tgz#55fc5fd23ea9dcc72250b9a889803479f4842961"
   integrity sha512-3iJkNJT8xlHklPCdeZtUZmJmRVUbr6AHRlfSsztfYTXVlHrv2TcPn3XkHsH+12j812WVB7gvilS2j3+ffjUHXg==
@@ -6740,10 +6736,10 @@ rc-switch@~1.9.0:
     prop-types "^15.5.6"
     react-lifecycles-compat "^3.0.4"
 
-rc-table@~7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/rc-table/-/rc-table-7.0.0.tgz#53f4652f661e77cfcda98ed6ece895ea76d12308"
-  integrity sha512-XVoRsJ1r3Oh1zl8vxVNBD/+4ZFL5hpHcEwEBpJLJ+I+N2uM/fnAYASHqYEkBdvCRv7l0nG0qTeFOB4dQQAHuLA==
+rc-table@~6.10.5:
+  version "6.10.13"
+  resolved "https://registry.yarnpkg.com/rc-table/-/rc-table-6.10.13.tgz#9ef31f199abdb52d5db49b17ccd5f7cb77f0e498"
+  integrity sha512-Pqb83gVWWdmfeE9tR+7vdi9dWO963Vq2n+nz5oE8LOpCkF/1UVLKcw7Som5FHpilOjd44c+wLPIL4H8Gx2i6qg==
   dependencies:
     classnames "^2.2.5"
     component-classes "^1.2.6"
@@ -6820,14 +6816,15 @@ rc-upload@~3.0.0:
     babel-runtime "6.x"
     classnames "^2.2.5"
 
-rc-util@^4.0.4, rc-util@^4.13.0, rc-util@^4.15.3, rc-util@^4.16.1, rc-util@^4.3.0, rc-util@^4.5.1, rc-util@^4.6.0:
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/rc-util/-/rc-util-4.19.0.tgz#f3b5e3a02cc0a667d127784068e1236c095dbcbf"
-  integrity sha512-mptALlLwpeczS3nrv83DbwJNeupolbuvlIEjcvimSiWI8NUBjpF0HgG3kWp1RymiuiRCNm9yhaXqDz0a99dpgQ==
+rc-util@^4.0.4, rc-util@^4.1.1, rc-util@^4.13.0, rc-util@^4.15.3, rc-util@^4.15.7, rc-util@^4.16.1, rc-util@^4.3.0, rc-util@^4.4.0, rc-util@^4.5.0, rc-util@^4.5.1, rc-util@^4.6.0:
+  version "4.20.0"
+  resolved "https://registry.yarnpkg.com/rc-util/-/rc-util-4.20.0.tgz#fb601c59bb48cbee38538e0d5b628addda6a8c30"
+  integrity sha512-rUqk4RqtDe4OfTsSk2GpbvIQNVtfmmebw4Rn7ZAA1TO1zLMLfyOF78ZyrEKqs8RDwoE3S1aXp0AX0ogLfSxXrQ
   dependencies:
     add-dom-event-listener "^1.1.0"
     babel-runtime "6.x"
     prop-types "^15.5.10"
+    react-is "^16.12.0"
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.1.0"
 
