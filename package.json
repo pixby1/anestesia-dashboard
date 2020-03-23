@@ -13,7 +13,7 @@
     "cookies": "^0.8.0",
     "emotion-theming": "^10.0.27",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.2",
+    "mongoose": "^5.9.6",
     "next": "^9.2.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
@@ -35,7 +35,7 @@
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
     "ms": "^2.1.2",
-    "prettier": "^2.0.1",
+    "prettier": "^2.0.2",
     "typescript": "^3.8.3"
   },
   "husky": {
