@@ -1,7 +1,18 @@
 /* eslint-disable react/display-name */
 // Packages
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Row, Select, Input, Popconfirm, message } from 'antd';
+import {
+  Table,
+  Button,
+  Row,
+  Select,
+  Input,
+  Popconfirm,
+  message,
+  Tooltip,
+} from 'antd';
+
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Option, OptGroup } = Select;
 
@@ -10,7 +21,7 @@ import { Layout } from '../components/Dashboard/Layout';
 
 // Helpers
 import { rolJobsPending } from '../lib/helper/rolOption';
-import { countriesPending } from '../lib/helper/countryOption';
+import { countries } from '../lib/helper/countryOption';
 import { count } from '../lib/helper/count';
 import { totalDynamicColumn, totalPendingColumn } from '../lib/helper/columns';
 
@@ -37,39 +48,39 @@ const Pending = () => {
   const columns = [
     {
       title: 'PAÍS',
-      dataIndex: 'country'
+      dataIndex: 'country',
     },
     {
       title: 'CIUDAD',
-      dataIndex: 'city'
+      dataIndex: 'city',
     },
     {
       title: 'APELLIDO',
-      dataIndex: 'lastName'
+      dataIndex: 'lastName',
     },
     {
       title: 'NOMBRE',
-      dataIndex: 'name'
+      dataIndex: 'name',
     },
     {
       title: 'FECHA DE NACIMIENTO',
-      dataIndex: 'birthday'
+      dataIndex: 'birthday',
     },
     {
       title: 'EMAIL',
-      dataIndex: 'email'
+      dataIndex: 'email',
     },
     {
       title: 'TELÉFONO',
-      dataIndex: 'phone'
+      dataIndex: 'phone',
     },
     {
       title: 'GENERO',
-      dataIndex: 'gender'
+      dataIndex: 'gender',
     },
     {
       title: 'CAT',
-      dataIndex: 'jobRole'
+      dataIndex: 'jobRole',
     },
     {
       title: 'CONFIRMAR',
@@ -81,7 +92,7 @@ const Pending = () => {
         >
           <Button type="default">Confirmar</Button>
         </Popconfirm>
-      )
+      ),
     },
     {
       title: 'APROBADO',
@@ -93,7 +104,7 @@ const Pending = () => {
         >
           <Button type="primary">Aprobar</Button>
         </Popconfirm>
-      )
+      ),
     },
     {
       title: 'ELIMINAR',
@@ -105,41 +116,41 @@ const Pending = () => {
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
-      )
-    }
+      ),
+    },
   ];
   const columnsSearch = [
     {
       title: 'CIUDAD',
-      dataIndex: 'city'
+      dataIndex: 'city',
     },
     {
       title: 'APELLIDO',
-      dataIndex: 'lastName'
+      dataIndex: 'lastName',
     },
     {
       title: 'NOMBRE',
-      dataIndex: 'name'
+      dataIndex: 'name',
     },
     {
       title: 'FECHA DE NACIMIENTO',
-      dataIndex: 'birthday'
+      dataIndex: 'birthday',
     },
     {
       title: 'EMAIL',
-      dataIndex: 'email'
+      dataIndex: 'email',
     },
     {
       title: 'TELÉFONO',
-      dataIndex: 'phone'
+      dataIndex: 'phone',
     },
     {
       title: 'GENERO',
-      dataIndex: 'gender'
+      dataIndex: 'gender',
     },
     {
       title: 'CAT',
-      dataIndex: 'jobRole'
+      dataIndex: 'jobRole',
     },
     {
       title: 'CONFIRMAR',
@@ -151,7 +162,7 @@ const Pending = () => {
         >
           <Button type="default">Confirmar</Button>
         </Popconfirm>
-      )
+      ),
     },
     {
       title: 'APROBADO',
@@ -163,7 +174,7 @@ const Pending = () => {
         >
           <Button type="primary">Aprobar</Button>
         </Popconfirm>
-      )
+      ),
     },
     {
       title: 'ELIMINAR',
@@ -175,14 +186,14 @@ const Pending = () => {
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
-      )
-    }
+      ),
+    },
   ];
   const approvedUser = (index, record) => {
     fetch('/api/pending', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: record._id, state: 'APPROVED' })
+      body: JSON.stringify({ id: record._id, state: 'APPROVED' }),
     }).then(() => {
       const removeItem = [...users];
       removeItem.splice(index, 1);
@@ -197,8 +208,8 @@ const Pending = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name,
-        society: record.society
-      })
+        society: record.society,
+      }),
     }).then(() => {
       message.success('Email a la sociedad📩');
     });
@@ -207,7 +218,7 @@ const Pending = () => {
     fetch('/api/removeUser', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: record._id, userRemove: true })
+      body: JSON.stringify({ id: record._id, userRemove: true }),
     }).then(() => {
       const removeItem = [...users];
       removeItem.splice(index, 1);
@@ -215,11 +226,11 @@ const Pending = () => {
       message.success('Usuario eliminado');
     });
   };
-  const handleChange = event => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setState({
       ...state,
-      [name]: value
+      [name]: value,
     });
   };
   const handleClick = async () => {
@@ -292,16 +303,10 @@ const Pending = () => {
       />
     );
   };
-  const notCountries = countriesPending.filter(item => {
+  const rolAll = rolJobsPending.filter((item) => {
     return item.label === 'PENDIENTES';
   });
-  const countrieList = countriesPending.filter(item => {
-    return item.label !== 'PENDIENTES';
-  });
-  const rolAll = rolJobsPending.filter(item => {
-    return item.label === 'PENDIENTES';
-  });
-  const rolCategory = rolJobsPending.filter(item => {
+  const rolCategory = rolJobsPending.filter((item) => {
     return item.label !== 'PENDIENTES';
   });
   const result = count(users);
@@ -322,17 +327,13 @@ const Pending = () => {
         <Select
           placeholder="País..."
           style={{ marginRight: 8, width: 120, maxWidth: '60vw' }}
-          onChange={selectValue => setCountry(selectValue)}
+          onChange={(selectValue) => setCountry(selectValue)}
         >
           <OptGroup label="Todos">
-            {notCountries.map((item, index) => (
-              <Option key={index} value={item.value}>
-                {item.label}
-              </Option>
-            ))}
+            <Option value="todos">PENDIENTES</Option>
           </OptGroup>
           <OptGroup label="Países">
-            {countrieList.map((item, index) => (
+            {countries.map((item, index) => (
               <Option key={index} value={item.value}>
                 {item.label}
               </Option>
@@ -354,7 +355,7 @@ const Pending = () => {
         <Select
           placeholder="Cat..."
           style={{ width: 120, maxWidth: '60vw' }}
-          onChange={value => setRol(value)}
+          onChange={(value) => setRol(value)}
         >
           {rolAll.map((item, index) => (
             <Option key={index} value={item.value}>
@@ -369,13 +370,15 @@ const Pending = () => {
             ))}
           </OptGroup>
         </Select>
-        <Button
-          style={{ marginLeft: 8 }}
-          onClick={handleClick}
-          type="primary"
-          shape="circle"
-          icon="search"
-        />
+        <Tooltip title="search">
+          <Button
+            style={{ marginLeft: 8 }}
+            onClick={handleClick}
+            type="primary"
+            shape="circle"
+            icon={<SearchOutlined />}
+          />
+        </Tooltip>
       </Row>
       <Row type="flex" justify="center" style={{ margin: '2em' }}>
         <Table

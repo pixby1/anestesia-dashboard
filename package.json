@@ -9,7 +9,7 @@
     "@chakra-ui/core": "^0.6.1",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "antd": "^3.26.12,
+    "antd": "^4.0.4",
     "cookies": "^0.8.0",
     "emotion-theming": "^10.0.27",
     "jsonwebtoken": "^8.5.1",
@@ -35,7 +35,7 @@
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
     "ms": "^2.1.2",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.1",
     "typescript": "^3.8.3"
   },
   "husky": {

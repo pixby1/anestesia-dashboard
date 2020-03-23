@@ -1,6 +1,16 @@
 // Packages
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Select, Button, Row, Popconfirm, message } from 'antd';
+import {
+  Table,
+  Input,
+  Select,
+  Button,
+  Row,
+  Popconfirm,
+  message,
+  Tooltip,
+} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Option, OptGroup } = Select;
 
@@ -9,12 +19,12 @@ import { Layout } from '../components/Dashboard/Layout';
 
 // Helpers
 import { count, stats } from '../lib/helper/count';
-import { countriesApproved } from '../lib/helper/countryOption';
+import { countries } from '../lib/helper/countryOption';
 import { rolJobsApproved } from '../lib/helper/rolOption';
 import {
   statsColumn,
   totalDynamicColumn,
-  totalClassColumn
+  totalClassColumn,
 } from '../lib/helper/columns';
 
 const Dashboard = () => {
@@ -41,39 +51,39 @@ const Dashboard = () => {
   const columns = [
     {
       title: 'PAÍS',
-      dataIndex: 'country'
+      dataIndex: 'country',
     },
     {
       title: 'CIUDAD',
-      dataIndex: 'city'
+      dataIndex: 'city',
     },
     {
       title: 'APELLIDO',
-      dataIndex: 'lastName'
+      dataIndex: 'lastName',
     },
     {
       title: 'NOMBRE',
-      dataIndex: 'name'
+      dataIndex: 'name',
     },
     {
       title: 'FECHA DE NACIMIENTO',
-      dataIndex: 'birthday'
+      dataIndex: 'birthday',
     },
     {
       title: 'EMAIL',
-      dataIndex: 'email'
+      dataIndex: 'email',
     },
     {
       title: 'TELÉFONO',
-      dataIndex: 'phone'
+      dataIndex: 'phone',
     },
     {
       title: 'GENERO',
-      dataIndex: 'gender'
+      dataIndex: 'gender',
     },
     {
       title: 'CAT',
-      dataIndex: 'jobRole'
+      dataIndex: 'jobRole',
     },
     {
       title: 'ELIMINAR',
@@ -86,41 +96,41 @@ const Dashboard = () => {
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
-      )
-    }
+      ),
+    },
   ];
   const columnsSearch = [
     {
       title: 'CIUDAD',
-      dataIndex: 'city'
+      dataIndex: 'city',
     },
     {
       title: 'APELLIDO',
-      dataIndex: 'lastName'
+      dataIndex: 'lastName',
     },
     {
       title: 'NOMBRE',
-      dataIndex: 'name'
+      dataIndex: 'name',
     },
     {
       title: 'FECHA DE NACIMIENTO',
-      dataIndex: 'birthday'
+      dataIndex: 'birthday',
     },
     {
       title: 'EMAIL',
-      dataIndex: 'email'
+      dataIndex: 'email',
     },
     {
       title: 'TELÉFONO',
-      dataIndex: 'phone'
+      dataIndex: 'phone',
     },
     {
       title: 'GENERO',
-      dataIndex: 'gender'
+      dataIndex: 'gender',
     },
     {
       title: 'CAT',
-      dataIndex: 'jobRole'
+      dataIndex: 'jobRole',
     },
     {
       title: 'ELIMINAR',
@@ -133,14 +143,14 @@ const Dashboard = () => {
         >
           <Button type="danger">Eliminar</Button>
         </Popconfirm>
-      )
-    }
+      ),
+    },
   ];
-  const handleChange = event => {
+  const handleChange = (event) => {
     const { value, name } = event.target;
     setState({
       ...state,
-      [name]: value
+      [name]: value,
     });
   };
   const handleClick = async () => {
@@ -197,7 +207,7 @@ const Dashboard = () => {
     fetch('/api/removeUser', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: record._id, userRemove: true })
+      body: JSON.stringify({ id: record._id, userRemove: true }),
     }).then(() => {
       const removeItem = [...users];
       removeItem.splice(index, 1);
@@ -235,7 +245,7 @@ const Dashboard = () => {
         country: item[0],
         total: item[1].total,
         resident: item[1].residente || 0,
-        anesthesiologist: item[1].anestesiólogo || 0
+        anesthesiologist: item[1].anestesiólogo || 0,
       };
     });
     const finallyData = [...dummy];
@@ -272,22 +282,10 @@ const Dashboard = () => {
       );
     }
   };
-  const notCountries = countriesApproved.filter(item => {
+  const rolAll = rolJobsApproved.filter((item) => {
     return item.label === 'Socios CLASA';
   });
-  const statsCountries = countriesApproved.filter(item => {
-    return item.label === 'Totales CLASA';
-  });
-  const countrieList = countriesApproved.filter(item => {
-    return item.label !== 'Socios CLASA';
-  });
-  const listCountries = countrieList.filter(item => {
-    return item.label !== 'Totales CLASA';
-  });
-  const rolAll = rolJobsApproved.filter(item => {
-    return item.label === 'Socios CLASA';
-  });
-  const rolCategory = rolJobsApproved.filter(item => {
+  const rolCategory = rolJobsApproved.filter((item) => {
     return item.label !== 'Socios CLASA';
   });
   const result = count(users);
@@ -308,27 +306,19 @@ const Dashboard = () => {
           defaultValue="totalClass"
           placeholder="País..."
           style={{ marginRight: 8, width: 120, maxWidth: '60vw' }}
-          onChange={selectValue => {
+          onChange={(selectValue) => {
             setMetric(false);
             setCountry(selectValue);
           }}
         >
           <OptGroup label="Estadisticas">
-            {statsCountries.map((item, index) => (
-              <Option key={index} value={item.value}>
-                {item.label}
-              </Option>
-            ))}
+            <Option value="totalClass">Totales CLASA</Option>
           </OptGroup>
           <OptGroup label="Todos">
-            {notCountries.map((item, index) => (
-              <Option key={index} value={item.value}>
-                {item.label}
-              </Option>
-            ))}
+            <Option value="todos">Socios CLASA</Option>
           </OptGroup>
           <OptGroup label="Países">
-            {listCountries.map((item, index) => (
+            {countries.map((item, index) => (
               <Option key={index} value={item.value}>
                 {item.label}
               </Option>
@@ -350,7 +340,7 @@ const Dashboard = () => {
         <Select
           placeholder="Cat..."
           style={{ width: 120, maxWidth: '60vw' }}
-          onChange={value => setRol(value)}
+          onChange={(value) => setRol(value)}
         >
           {rolAll.map((item, index) => (
             <Option key={index} value={item.value}>
@@ -365,13 +355,15 @@ const Dashboard = () => {
             ))}
           </OptGroup>
         </Select>
-        <Button
-          style={{ marginLeft: 8 }}
-          onClick={handleClick}
-          type="primary"
-          shape="circle"
-          icon="search"
-        />
+        <Tooltip title="search">
+          <Button
+            style={{ marginLeft: 8 }}
+            onClick={handleClick}
+            type="primary"
+            shape="circle"
+            icon={<SearchOutlined />}
+          />
+        </Tooltip>
       </Row>
       {showStats()}
     </Layout>
